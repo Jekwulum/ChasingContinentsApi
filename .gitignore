@@ -181,4 +181,4 @@ app2.0.py
 main.py
 version2.0.py
 *.json
-.myenv
+.myvenv
