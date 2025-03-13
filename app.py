@@ -19,6 +19,9 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/api/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "UP"})
 
 @app.route("/api/flights", methods=["GET"])
 def fetch_flights():
@@ -108,7 +111,4 @@ def fetch_flights():
 
 
 if __name__ == "__main__":
-    debug = True
-    if os.getenv("APP_ENV") == "production":
-        debug = False
-    app.run(debug=debug)
+    app.run(debug=True)
