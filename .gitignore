@@ -2,7 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+<<<<<<< HEAD
 .idea
+=======
+>>>>>>> e6ed2b81a113443e9e604493693d668187835779
 
 # C extensions
 *.so
@@ -177,3 +180,4 @@ app_x.py
 app2.0.py
 main.py
 version2.0.py
+*.json
