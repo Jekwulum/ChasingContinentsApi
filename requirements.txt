@@ -3,3 +3,4 @@ flask
 pytz
 amadeus
 python-dotenv
+gunicorn
