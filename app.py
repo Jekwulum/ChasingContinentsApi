@@ -1,7 +1,9 @@
 import pytz
+import os
 import itertools
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from dotenv import load_dotenv
 from datetime import datetime
 from withstops import WithStops
 from directonly import DirectFlight
@@ -13,6 +15,7 @@ africa_destinations = ["CMN", "CAI"]
 asia_destinations = ["DOH", "DXB", "KUL"]
 australia_destinations = ["PER"]
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
@@ -105,4 +108,7 @@ def fetch_flights():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    debug = True
+    if os.getenv("APP_ENV") == "production":
+        debug = False
+    app.run(debug=debug)
