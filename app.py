@@ -125,8 +125,9 @@ def fetch_flights():
 
         if email:
             email_data = EmailFlightData()
+            subject = "Flight Itinerary"
             email_content = email_data.format_email_content(best_sequence, best_itinerary)
-            email_data.send_email(email, email_content)
+            email_data.send_mail(email, subject, email_content)
 
         return jsonify(
             {
