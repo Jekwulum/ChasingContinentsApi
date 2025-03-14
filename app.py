@@ -6,8 +6,10 @@ import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
+from datetime import datetime as dt
 from withstops import WithStops
 from directonly import DirectFlight
+from email_flights_data import EmailFlightData
 
 south_america_destinations = ["SCL"]
 north_america_destinations = ["MIA", "PTY", "LAX", "SFO", "SAN", "TIJ"]
@@ -40,9 +42,10 @@ def fetch_flights():
     departure_date = request.args.get("departure_date")
     departure_time = request.args.get("departure_time")
     flight_type = request.args.get("flight_type", "direct")  # direct or stops
+    email = request.args.get("email", None)
 
     try:
-        current_time = datetime.strptime(
+        current_time = dt.strptime(
             f"{departure_date} {departure_time}", "%Y-%m-%d %H:%M"
         )
         current_time = pytz.utc.localize(current_time)
@@ -120,10 +123,15 @@ def fetch_flights():
 
         best_itinerary = json.dumps(best_itinerary, default=serialize_datetime)
 
+        if email:
+            email_data = EmailFlightData()
+            email_content = email_data.format_email_content(best_sequence, best_itinerary)
+            email_data.send_email(email, email_content)
+
         return jsonify(
             {
                 "status": "SUCCESS",
-                "data": {"sequence": best_sequence, "itinerary": best_itinerary},
+                "data": {"best_sequence": best_sequence, "best_itinerary": best_itinerary},
             }
         )
     else:
@@ -137,7 +145,7 @@ def fetch_flights():
 
 @app.route("/api/tests", methods=["GET"])
 def test():
-    data = {
+    best_itinerary = {
         'flights': [
             {
                 'airline': 'LA',
@@ -217,8 +225,14 @@ def test():
         'total_travel_time': datetime.timedelta(days=2, seconds=79800),
         'total_cost': 2954.1899999999996
     }
-    json_data = json.dumps(data, default=serialize_datetime)
-    return jsonify({"status": "SUCCESS", "data": json_data})
+    best_itinerary = json.dumps(best_itinerary, default=serialize_datetime)
+    best_sequence = ["SCL", "MIA", "MAD", "CAI", "DOH", "PER"]
+    email = "charlesnwoye2@gmail.com"
+    subject = "Flight Itinerary"
+    email_data = EmailFlightData()
+    email_content = email_data.format_email_content(best_sequence, best_itinerary)
+    email_data.send_mail(email, subject, email_content)
+    return jsonify({"status": "SUCCESS", "data": {"best_itinerary": best_itinerary, "best_sequence": best_sequence}})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
