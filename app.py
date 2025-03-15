@@ -3,6 +3,7 @@ import os
 import itertools
 import json
 import datetime
+# import logging
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -236,4 +237,5 @@ def test():
     return jsonify({"status": "SUCCESS", "data": {"best_itinerary": best_itinerary, "best_sequence": best_sequence}})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=10000, debug=True)
+    # logging.basicConfig(level=logging.DEBUG)
