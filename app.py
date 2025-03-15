@@ -81,6 +81,8 @@ def fetch_flights():
     # Check each full sequence
     for sequence in all_sequences:
         sequence_count += 1
+        if sequence_count == 60:
+            break
         print(f"\nChecking sequence {sequence_count}: {sequence}")
         itinerary = flight_instance.simulate_itinerary(
             start_origin, sequence, current_time
