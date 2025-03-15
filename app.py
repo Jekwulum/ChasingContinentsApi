@@ -237,5 +237,5 @@ def test():
     return jsonify({"status": "SUCCESS", "data": {"best_itinerary": best_itinerary, "best_sequence": best_sequence}})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
     # logging.basicConfig(level=logging.DEBUG)
